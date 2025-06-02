@@ -16,8 +16,10 @@ function refreshWeather(response) {
     windSpeedElement.innerHTML = `${Math.round(response.data.wind.speed)} mph`;
     temperatureElement.innerHTML = Math.round(temperature);
     iconElement.innerHTML = `<img src="${response.data.condition.icon_url}" class="weather-app-icon" />`;
-  }
   
+  getForecast(response.data.city);
+}
+
   function formatDate(date) {
     let minutes = date.getMinutes();
     let hours = date.getHours();
@@ -55,13 +57,18 @@ function refreshWeather(response) {
     let searchInput = document.querySelector("#search-form-input");
     searchCity(searchInput.value);
   }
-  
+
   let searchFormElement = document.querySelector("#search-form");
   searchFormElement.addEventListener("submit", handleSearchSubmit);
 
-  function displayForecast() {
+  function getForecast(city) {
+    let apiKey = "cb60bbeo7bd602d062ff8d664eta0043";
+    let apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=imperial`;
+    axios(apiUrl).then(displayForecast);
+  }
 
-  
+  function displayForecast(response) {
+    console.log(response.data);
 let days = ['Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 let forecastHtml = "";
 
@@ -84,6 +91,7 @@ days.forEach(function (day) {
 let forecastElement = document.querySelector("#forecast");
 forecastElement.innerHTML = forecastHtml;
   }
-   // Default city
-   searchCity("Oklahoma City");
-   displayForecast();
+   
+  searchCity("Oklahoma City");
+
+  
